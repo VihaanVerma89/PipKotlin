@@ -27,6 +27,7 @@ import android.content.res.Configuration
 import android.graphics.drawable.Icon
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Rational
@@ -42,6 +43,7 @@ import java.util.*
  */
 class MainActivity : AppCompatActivity() {
 
+    val TAG = this.javaClass.simpleName
     companion object {
 
         /** Intent action for media controls from Picture-in-Picture mode.  */
@@ -180,7 +182,12 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.pip).setOnClickListener { minimize() }
     }
 
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart: ")
+    }
     override fun onStop() {
+        Log.d(TAG, "onStop: ")
         // On entering Picture-in-Picture mode, onPause is called, but not onStop.
         // For this reason, this is the place where we should pause the video playback.
         mMovieView.pause()
@@ -189,10 +196,21 @@ class MainActivity : AppCompatActivity() {
 
     override fun onRestart() {
         super.onRestart()
+        Log.d(TAG, "onRestart: ")
         // Show the video controls so the video can be easily resumed.
         if (!isInPictureInPictureMode) {
             mMovieView.showControls()
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "onPause: ")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume: ")
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
